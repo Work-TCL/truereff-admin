@@ -2,7 +2,7 @@ import { LogOut } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
-export const Header = () => {
+const Header = () => {
     const navigate = useNavigate();
     const handleLogOut = () => {
         localStorage.removeItem("token");
@@ -24,3 +24,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;

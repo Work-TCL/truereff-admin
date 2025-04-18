@@ -1,11 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Home, User, Settings } from 'lucide-react';
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
   const navItems = [
-    { name: 'Dashboard', icon: <Home /> },
-    { name: 'Users', icon: <User /> },
-    { name: 'Settings', icon: <Settings /> },
+    { name: 'Dashboard', icon: <Home />, path:"/"},
+    { name: 'Categories', icon: <Home />, path:"/categories"},
+    { name: 'Users', icon: <User />, path:"/"},
+    { name: 'Settings', icon: <Settings />, path:"/settings"},
   ];
 
   return (
@@ -13,7 +16,7 @@ export const Sidebar = () => {
       <h1 className="text-xl font-bold mb-6">Admin Panel</h1>
       <ul className="space-y-4">
         {navItems.map((item) => (
-          <li key={item.name} className="flex items-center gap-3 cursor-pointer hover:text-gray-300">
+          <li key={item.name} className="flex items-center gap-3 cursor-pointer hover:text-gray-300" onClick={() => navigate(item?.path)}>
             {item.icon}
             <span>{item.name}</span>
           </li>
