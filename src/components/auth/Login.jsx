@@ -1,14 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toastMessage } from "../../Utils/toast-message";
+import { getErrorMessage } from "../../Utils/common-utils";
+import axiosInstance from "../../Utils/axios-api";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@site.com");
+  const [password, setPassword] = useState("Admin@123");
 
-  const handleLogin = () => {
-    localStorage.setItem("token", "sample-token");
-    navigate("/");
+  const handleLogin = async () => {
+    try {
+      const response = await axiosInstance.post("/auth/admin/auth/login", {
+        email,
+        password
+      });
+      if (response?.status === 200) {
+        toastMessage.success(response?.data?.message);
+        localStorage.setItem("token", response?.data?.data?.token);
+        navigate("/");
+      }
+    } catch (error) {
+      const errorMessage = getErrorMessage(error);
+      toastMessage.error(errorMessage);
+    }
   };
 
   return (
@@ -30,7 +45,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
-        disabled={(!email || !password)}
+          disabled={(!email || !password)}
           onClick={handleLogin}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-no-drop"
         >

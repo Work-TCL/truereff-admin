@@ -8,6 +8,8 @@ import { PublicRoute } from './routes/PublicRoute';
 import { CategoryManagement } from './components/dashboard/Category';
 import Settings from './components/dashboard/Settings';
 import { AppLayout } from './components/layouts/AppLayout';
+import Creators from './components/dashboard/Creator';
+import Vendors from './components/dashboard/Vendors';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           {/* Add more nested routes here */}
           <Route path="categories" element={<CategoryManagement />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="creators" element={<Creators />} />
+          <Route path="vendors" element={<Vendors />} />
         </Route>
       </Routes>
     </Router>
