@@ -5,7 +5,7 @@ import { Dashboard } from './components/dashboard/Dashboard';
 import Login from './components/auth/Login';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { PublicRoute } from './routes/PublicRoute';
-import { CategoryManagement } from './components/dashboard/Category';
+import CategoryManagement from './components/dashboard/Category';
 import Settings from './components/dashboard/Settings';
 import { AppLayout } from './components/layouts/AppLayout';
 import Creators from './components/dashboard/Creator';
