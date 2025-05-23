@@ -31,15 +31,16 @@ function AddEditModel({
         name: data?.name,
         parentId: data?.parentCategory || null,
       });
-      if (res?.status === 200) {
+      if (res?.status === 201) {
         toastMessage.success(res?.message || "Category add successfully.");
         setIsOpen(false);
         setLoading(false);
+        refreshCentral();
         return true;
       }
       throw res;
     } catch (e) {
-      console.log("while create category");
+      console.log("while create category", e);
       toastMessage.error(e?.message || "Category Create Failed.");
     } finally {
       setLoading(false);
@@ -49,12 +50,12 @@ function AddEditModel({
   const getCategories = async () => {
     try {
       let data = await getCategory({});
-      console.log("data", data);
+      console.log("data--cat", data?.data);
       if (data?.status === 200) {
         data = data?.data;
         setCategories(
           data?.data
-            ?.filter((val) => val && !Boolean(val?.parentCategory))
+            ?.filter((val) => val && !Boolean(val?.parentId))
             ?.map((t) => ({ label: t?.name, value: t?._id }))
         );
       }
@@ -82,11 +83,11 @@ function AddEditModel({
       ) : (
         ""
       )} */}
-      <div>
+      <div className="">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="grid grid-cols-2 text-left gap-3 w-full relative z-[999]"
+            className="grid grid-cols-2 text-left gap-3 w-full"
           >
             <div className="col-span-1">
               <Input
@@ -96,7 +97,7 @@ function AddEditModel({
                 label="Category"
               />
             </div>
-            <div className="col-span-1 relative z-[999]">
+            <div className="col-span-1">
               <Input
                 name="parentCategory"
                 type="react-select"

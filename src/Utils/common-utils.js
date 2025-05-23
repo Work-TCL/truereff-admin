@@ -41,3 +41,7 @@ export function cn(...inputs) {
 }
 
 export const RECORDS_PER_PAGE = 10
+
+export const CREATOR_STATUS = {
+  IN_PROGRESS: "IN_PROGRESS", PENDING_APPROVAL: "PENDING_APPROVAL", APPROVED: "APPROVED", REJECTED: "REJECTED"
+}

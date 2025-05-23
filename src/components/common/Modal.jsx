@@ -1,16 +1,25 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
-export default function Modal({ isOpen, onClose, title, children }) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  className = "",
+}) {
   if (!isOpen) return null;
 
-  return (
-    <div
-      className="fixed top-0 left-0 right-0 z-auto flex items-center justify-center w-full h-screen bg-black bg-opacity-50"
-      onClick={onClose}
-    >
+  const modalContent = (
+    <div className="fixed inset-0 z-[40] sm:w-screen h-screen overflow-hidden flex justify-center items-center">
       <div
-        className="bg-white dark:bg-gray-700 rounded-lg shadow-lg max-w-2xl w-full p-6 relative"
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+        className="block fixed inset-0 bg-black bg-opacity-60 transition-opacity z-1 lg:backdrop-blur-none backdrop-blur-sm"
+        aria-hidden="true"
+        onClick={() => onClose()}
+      ></div>
+      <div
+        className={`bg-white p-5 relative rounded-lg text-left transition-all w-fit h-fit max-h-[90vh] overflow-hidden flex flex-col ${className}`}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b pb-3 mb-4">
@@ -38,10 +47,15 @@ export default function Modal({ isOpen, onClose, title, children }) {
         </div>
 
         {/* Modal Body */}
-        <div className="text-gray-700 dark:text-gray-300 space-y-4">
+        <div className="text-gray-700 dark:text-gray-300 space-y-4 flex-1 overflow-auto">
           {children}
         </div>
       </div>
     </div>
+  );
+
+  return ReactDOM.createPortal(
+    modalContent,
+    document.getElementById("modal-root")
   );
 }

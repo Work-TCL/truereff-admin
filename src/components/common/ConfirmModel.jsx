@@ -13,7 +13,7 @@ export default function ConfirmModal({
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-screen bg-black bg-opacity-50"
+      className="fixed top-0 left-0 right-0 z-[50] flex items-center justify-center w-full h-screen bg-black bg-opacity-50"
       onClick={onClose}
     >
       <div

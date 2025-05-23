@@ -1,111 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
+import { RECORDS_PER_PAGE } from "../../Utils/common-utils";
+import { getVendorList } from "../../Utils/api";
+import DynamicTable from "../common/table";
 
-const transactions = [
-  {
-    name: "Bought PYPL",
-    date: "Nov 23, 01:00 PM",
-    price: "$2,567.88",
-    category: "Finance",
-    status: "Success",
-    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/paypal.svg",
-  },
-  {
-    name: "Bought AAPL",
-    date: "Nov 23, 01:00 PM",
-    price: "$2,567.88",
-    category: "Finance",
-    status: "Pending",
-    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/apple.svg",
-  },
-  {
-    name: "Sell KKST",
-    date: "Nov 23, 01:00 PM",
-    price: "$2,567.88",
-    category: "Finance",
-    status: "Success",
-    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/kickstarter.svg",
-  },
-  {
-    name: "Bought FB",
-    date: "Nov 23, 01:00 PM",
-    price: "$2,567.88",
-    category: "Finance",
-    status: "Success",
-    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg",
-  },
-  {
-    name: "Sell AMZN",
-    date: "Nov 23, 01:00 PM",
-    price: "$2,567.88",
-    category: "Finance",
-    status: "Failed",
-    icon: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/amazon.svg",
-  },
-];
-
-const statusClasses = {
-  Success: "bg-green-100 text-green-600",
-  Pending: "bg-yellow-100 text-yellow-600",
-  Failed: "bg-red-100 text-red-600",
-};
-
-const Vendors = () => {
+const Creators = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 3;
-  const totalPages = Math.ceil(transactions.length / rowsPerPage);
+  const [totalPages, setTotalPages] = useState(1);
+  const rowsPerPage = RECORDS_PER_PAGE;
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
-  const paginatedData = transactions.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
+  const refreshCentral = async () => {
+    setIsLoading(true);
+    try {
+      let data = await getVendorList({ page: currentPage, limit: rowsPerPage });
+      console.log("data", data);
+      if (data?.status === 200) {
+        data = data?.data;
+        const totalPage = Math.ceil((data?.total || 1) / rowsPerPage);
+        console.log("totalPage", totalPage);
 
+        setTotalPages(totalPage);
+        setCategories(data?.list);
+      }
+    } catch (error) {
+      console.log("while fetching category");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshCentral();
+  }, [currentPage, rowsPerPage]);
+
+  const columns = [
+    {
+      header: "User Name",
+      accessor: "accountId",
+      render: (value) =>
+        value ? <span className="">{value?.name}</span> : "-",
+    },
+    {
+      header: "Business Name",
+      accessor: "business_name",
+    },
+    {
+      header: "Business Email",
+      accessor: "company_email",
+    },
+    {
+      header: "Completed Step",
+      accessor: "completed_step",
+    },
+    {
+      header: "Category",
+      accessor: "category",
+      render: (value) =>
+        value ? (
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+            {value?.map((v) => v.name)?.join(",")}
+          </span>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      header: "Type",
+      accessor: "type_of_business",
+    },
+    {
+      header: "Website",
+      accessor: "website",
+      render: (value) =>
+        value ? (
+          <a
+            href={value}
+            target="_blank"
+            className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
+          >
+            {value}
+          </a>
+        ) : (
+          "-"
+        ),
+    },
+    {
+      header: "Created At",
+      accessor: "createdAt",
+      render: (value) =>
+        value ? (
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+            {new Date(value).toLocaleString()}
+          </span>
+        ) : (
+          "-"
+        ),
+    },
+  ];
   return (
-    <div className="p-6 bg-white shadow rounded-lg">
-      {/* <h3 className="text-lg font-semibold mb-4">Latest Transactions</h3> */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="text-sm text-gray-600 border-b">
-            <tr>
-              <th className="py-2">Name</th>
-              <th className="py-2">Date</th>
-              <th className="py-2">Price</th>
-              <th className="py-2">Category</th>
-              <th className="py-2">Status</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm">
-            {paginatedData.map((item, idx) => (
-              <tr key={idx} className="border-b last:border-0">
-                <td className="flex items-center gap-2 py-3">
-                  <img src={item.icon} alt="" className="h-6 w-6" />
-                  {item.name}
-                </td>
-                <td>{item.date}</td>
-                <td>{item.price}</td>
-                <td>{item.category}</td>
-                <td>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${statusClasses[item.status]}`}
-                  >
-                    {item.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+    <div className="relative h-full overflow-hidden flex flex-col w-full">
+      {isLoading ? (
+        <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 text-white flex justify-center items-center z-20">
+          Loading...
+        </div>
+      ) : null}
+      <DynamicTable
+        columns={columns}
+        data={categories}
+        actions={[]}
+        pagination={{
+          Component: Pagination,
+          currentPage,
+          totalPages,
+          onPageChange: handlePageChange,
+        }}
+      />
+      ;
     </div>
   );
 };
 
-export default Vendors;
+export default Creators;

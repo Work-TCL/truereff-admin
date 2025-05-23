@@ -299,9 +299,9 @@ export default function Input({
               onChange={(v) => setValue(name, v?.value)}
               value={options?.find((v) => v?.value === field?.value)}
               isDisabled={props?.disabled}
-              menuPortalTarget={
-                typeof document !== "undefined" ? document.body : null
-              } // Renders the dropdown outside of the current scrollable container
+              // menuPortalTarget={
+              //   typeof document !== "undefined" ? document.body : null
+              // } // Renders the dropdown outside of the current scrollable container
               menuPosition="fixed" // Makes the dropdown position fixed
               autoFocus={false} // Prevents focus behavior causing auto-scroll
             />
@@ -358,7 +358,7 @@ export default function Input({
     },
     menu: (base) => ({
       ...base,
-      zIndex: 9999,
+      zIndex: 99,
     }),
   };
   const renderMultiSelectInput = () => (
