@@ -26,7 +26,6 @@ function AddEditModel({
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      console.log("sssssssss", data);
       const res = await createCategory({
         name: data?.name,
         parentId: data?.parentCategory || null,
@@ -36,6 +35,11 @@ function AddEditModel({
         setIsOpen(false);
         setLoading(false);
         refreshCentral();
+        getCategories();
+        methods.reset({
+          name:"",
+          parentCategory:""
+        })
         return true;
       }
       throw res;

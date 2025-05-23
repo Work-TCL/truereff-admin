@@ -38,6 +38,7 @@ const Creators = () => {
 
   useEffect(() => {
     refreshCentral();
+    // eslint-disable-next-line
   }, [currentPage, rowsPerPage]);
 
   const columns = [
@@ -105,7 +106,7 @@ const Creators = () => {
     },
   ];
   return (
-    <div className="relative h-full overflow-hidden flex flex-col w-full">
+    <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
       {isLoading ? (
         <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 text-white flex justify-center items-center z-20">
           Loading...
@@ -122,7 +123,6 @@ const Creators = () => {
           onPageChange: handlePageChange,
         }}
       />
-      ;
     </div>
   );
 };

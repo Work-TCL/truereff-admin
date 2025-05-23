@@ -26,12 +26,10 @@ const CategoryManagement = () => {
   const refreshCentral = async () => {
     setIsLoading(true);
     try {
-      let data = await getCategory({ page: currentPage, limit: rowsPerPage });
-      console.log("data", data);
-      if (data?.status === 200) {
-        data = data?.data;
+      let response = await getCategory({ page: currentPage, limit: rowsPerPage });
+      if (response?.status === 200) {
+        const data = response?.data;
         const totalPage = Math.ceil((data?.count || 1) / rowsPerPage);
-        console.log("totalPage", totalPage);
 
         setTotalPages(totalPage);
         setCategories(data?.data);
@@ -46,7 +44,6 @@ const CategoryManagement = () => {
     setIsDelLoading(true);
     try {
       let data = await deleteCategory(isModalOpen);
-      console.log("data", data);
       if (data?.status === 200) {
         toastMessage.success(data?.message || "Category Deleted Successfully.");
         setIsModalOpen(null);
@@ -64,6 +61,7 @@ const CategoryManagement = () => {
 
   useEffect(() => {
     refreshCentral();
+    // eslint-disable-next-line
   }, [currentPage, rowsPerPage]);
 
   const columns = [
@@ -95,7 +93,7 @@ const CategoryManagement = () => {
   ];
 
   return (
-    <div className="relative h-full overflow-hidden flex flex-col w-full">
+    <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
       {isLoading ? (
         <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 text-white flex justify-center items-center z-20">
           Loading...
@@ -133,7 +131,6 @@ const CategoryManagement = () => {
           onPageChange: handlePageChange,
         }}
       />
-      ;
     </div>
   );
 };

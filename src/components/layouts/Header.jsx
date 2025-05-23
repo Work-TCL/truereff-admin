@@ -1,16 +1,19 @@
 import { LogOut } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from '../common/ConfirmModel';
 
-const Header = () => {
+const Header = ({active}) => {
     const navigate = useNavigate();
+    const [isModalOpen,setIsModalOpen] = useState(false);
     const handleLogOut = () => {
         localStorage.removeItem("token");
         navigate('/login')
     }
+    
   return (
     <header className="h-16 w-full bg-white flex items-center justify-between px-6 border-b">
-      <h2 className="text-xl font-semibold">Dashboard</h2>
+      <h2 className="text-xl font-semibold">{active}</h2>
       <div className="flex items-center gap-3">
         <span className="text-gray-600">Admin</span>
         <img
@@ -18,8 +21,16 @@ const Header = () => {
           alt="User avatar"
           className="w-8 h-8 rounded-full"
         />
-        <LogOut className='cursor-pointer' onClick={handleLogOut}/>
+        <LogOut className='cursor-pointer' onClick={()=> setIsModalOpen(true)}/>
       </div>
+      <ConfirmModal
+              isOpen={Boolean(isModalOpen)}
+              onClose={() => setIsModalOpen(false)}
+              onConfirm={handleLogOut}
+              title="Are you sure you want to logout?"
+              confirmText={"Yes"}
+              cancelText="No"
+            />
       
     </header>
   );

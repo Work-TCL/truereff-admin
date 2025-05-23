@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
-import { CREATOR_STATUS, RECORDS_PER_PAGE } from "../../Utils/common-utils";
+import { CREATOR_STATUS, RECORDS_PER_PAGE, STATUS_COLOR } from "../../Utils/common-utils";
 import {
-  getCreatorApprovedReject,
   getCreatorList,
-  getVendorList,
   postCreatorApprovedReject,
 } from "../../Utils/api";
 import DynamicTable from "../common/table";
@@ -30,17 +28,15 @@ const Creators = () => {
         page: currentPage,
         limit: rowsPerPage,
       });
-      console.log("data", data);
       if (data?.status === 200) {
         data = data?.data;
         const totalPage = Math.ceil((data?.total || 1) / rowsPerPage);
-        console.log("totalPage", totalPage);
 
         setTotalPages(totalPage);
         setCategories(data?.list);
       }
     } catch (error) {
-      console.log("while fetching category");
+      console.log("while fetching creators");
     } finally {
       setIsLoading(false);
     }
@@ -50,16 +46,15 @@ const Creators = () => {
     setIsDelLoading(true);
     try {
       let data = await postCreatorApprovedReject(params);
-      console.log("data", data);
       if (data?.status === 200) {
-        toastMessage.success(data?.message || "Category Deleted Successfully.");
+        toastMessage.success(data?.message || "Approved.");
         // setIsModalOpen(null);
         refreshCentral();
         return true;
       }
       throw data;
     } catch (error) {
-      toastMessage.error("Failed to Delete Category");
+      toastMessage.error("Failed to update status");
     } finally {
       // setIsModalOpen(null);
       setIsDelLoading(false);
@@ -68,6 +63,7 @@ const Creators = () => {
 
   useEffect(() => {
     refreshCentral();
+    //eslint-disable-next-line
   }, [currentPage, rowsPerPage]);
 
   const columns = [
@@ -177,7 +173,7 @@ const Creators = () => {
                 }
                 className={`text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 focus:ring-green-300 px-3 py-2 text-xs font-medium rounded-lg focus:ring-4 focus:outline-none`}
               >
-                approve
+                Approve
               </button>
               <button
                 onClick={() =>
@@ -188,11 +184,11 @@ const Creators = () => {
                 }
                 className={`text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 focus:ring-red-300 px-3 py-2 text-xs font-medium rounded-lg focus:ring-4 focus:outline-none`}
               >
-                reject
+                Reject
               </button>
             </div>
           ) : (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+            <span className={`px-3 py-1 ${STATUS_COLOR[value]} bg-opacity-10 rounded-full text-xs font-medium bg-gray-200 text-gray-800`}>
               {value}
             </span>
           )
@@ -217,8 +213,8 @@ const Creators = () => {
     // },
   ];
   return (
-    <div className="relative h-full overflow-hidden flex flex-col w-full">
-      {isLoading ? (
+    <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
+      {(isLoading || isDelLoading) ? (
         <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 text-white flex justify-center items-center z-20">
           Loading...
         </div>
