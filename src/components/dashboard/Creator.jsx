@@ -188,7 +188,7 @@ const Creators = () => {
               </button>
             </div>
           ) : (
-            <span className={`px-3 py-1 ${STATUS_COLOR[value]} bg-opacity-10 rounded-full text-xs font-medium bg-gray-200 text-gray-800`}>
+            <span className={`px-3 py-1 ${STATUS_COLOR[value??""]} bg-opacity-10 rounded-full text-xs font-medium`}>
               {value}
             </span>
           )

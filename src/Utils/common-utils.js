@@ -47,6 +47,7 @@ export const CREATOR_STATUS = {
 }
 
 export const STATUS_COLOR = {
+  "": "bg-gray-400 text-black",
   IN_PROGRESS: "bg-[#FF9500] text-[#FF9500]",
   REJECTED: "bg-[#FF3B30] text-[#FF3B30]",
   PENDING_APPROVAL: "bg-[#5856D6] text-[#5856D6]",
