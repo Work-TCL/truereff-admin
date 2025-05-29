@@ -40,6 +40,11 @@ export function postCreatorApprovedReject(params) {
         ...params
     }).then(res => res.data).catch(e => e);
 }
+export function postVendorApprovedReject(params) {
+    return axiosInstance.post('/auth/admin/vendor/approve-reject', {
+        ...params
+    }).then(res => res.data).catch(e => e);
+}
 
 export function getCreatorDetails(vendorId) {
     return axiosInstance.get(`/auth/admin/creator/details/${vendorId}`).then(res => res.data);
