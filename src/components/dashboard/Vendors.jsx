@@ -8,6 +8,7 @@ import {
 import { getVendorList, postVendorApprovedReject } from "../../Utils/api";
 import DynamicTable from "../common/table";
 import { toastMessage } from "../../Utils/toast-message";
+import { Link } from "react-router-dom";
 
 const Creators = () => {
   const [isDelLoading, setIsDelLoading] = useState(false);
@@ -76,6 +77,17 @@ const Creators = () => {
     {
       header: "Business Name",
       accessor: "business_name",
+      render: (value, item) =>
+        value ? (
+          <Link
+            to={`/vendors/${item?._id}`}
+            className="text-blue-500 hover:underline"
+          >
+            {value}
+          </Link>
+        ) : (
+          "-"
+        ),
     },
     {
       header: "Business Email",

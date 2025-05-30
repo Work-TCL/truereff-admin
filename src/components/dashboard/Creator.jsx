@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../common/Pagination";
-import { CREATOR_STATUS, RECORDS_PER_PAGE, STATUS_COLOR } from "../../Utils/common-utils";
 import {
-  getCreatorList,
-  postCreatorApprovedReject,
-} from "../../Utils/api";
+  CREATOR_STATUS,
+  RECORDS_PER_PAGE,
+  STATUS_COLOR,
+} from "../../Utils/common-utils";
+import { getCreatorList, postCreatorApprovedReject } from "../../Utils/api";
 import DynamicTable from "../common/table";
 import { toastMessage } from "../../Utils/toast-message";
+import { Link } from "react-router-dom";
 
 const Creators = () => {
   const [isDelLoading, setIsDelLoading] = useState(false);
@@ -76,6 +78,17 @@ const Creators = () => {
     {
       header: "Full Name",
       accessor: "full_name",
+      render: (value, item) =>
+        value ? (
+          <Link
+            to={`/creators/${item?._id}`}
+            className="text-blue-500 hover:underline"
+          >
+            {value}
+          </Link>
+        ) : (
+          "-"
+        ),
     },
     {
       header: "Email",
@@ -89,7 +102,7 @@ const Creators = () => {
       header: "Category",
       accessor: "category",
       render: (value) =>
-        value ? (
+        value.length > 0 ? (
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
             {value?.map((v) => v.name)?.join(",")}
           </span>
@@ -188,7 +201,11 @@ const Creators = () => {
               </button>
             </div>
           ) : (
-            <span className={`px-3 py-1 ${STATUS_COLOR[value??""]} bg-opacity-10 rounded-full text-xs font-medium`}>
+            <span
+              className={`px-3 py-1 ${
+                STATUS_COLOR[value ?? ""]
+              } bg-opacity-10 rounded-full text-xs font-medium`}
+            >
               {value}
             </span>
           )
@@ -214,7 +231,7 @@ const Creators = () => {
   ];
   return (
     <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
-      {(isLoading || isDelLoading) ? (
+      {isLoading || isDelLoading ? (
         <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/20 text-white flex justify-center items-center z-20">
           Loading...
         </div>

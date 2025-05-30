@@ -10,6 +10,8 @@ import Settings from './components/dashboard/Settings';
 import { AppLayout } from './components/layouts/AppLayout';
 import Creators from './components/dashboard/Creator';
 import Vendors from './components/dashboard/Vendors';
+import CreatorDetails from './components/dashboard/CreatorDetails';
+import VendorDetails from './components/dashboard/VendorDetails';
 
 function App() {
   return (
@@ -28,7 +30,9 @@ function App() {
           <Route path="categories" element={<CategoryManagement />} />
           <Route path="settings" element={<Settings />} />
           <Route path="creators" element={<Creators />} />
+          <Route path="creators/:creatorId" element={<CreatorDetails />} />
           <Route path="vendors" element={<Vendors />} />
+          <Route path="vendors/:vendorId" element={<VendorDetails />} />
         </Route>
       </Routes>
     </Router>
