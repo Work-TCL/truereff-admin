@@ -23,12 +23,12 @@ export default function Modal({
       >
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b pb-3 mb-4">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-semibold text-gray-900">
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            className="text-gray-400 hover:text-gray-900 "
           >
             <svg
               className="w-5 h-5"
@@ -47,7 +47,7 @@ export default function Modal({
         </div>
 
         {/* Modal Body */}
-        <div className="text-gray-700 dark:text-gray-300 space-y-4 flex-1 overflow-auto">
+        <div className="text-gray-700 space-y-4 flex-1 overflow-auto">
           {children}
         </div>
       </div>
