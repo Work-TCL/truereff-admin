@@ -53,3 +53,26 @@ export const STATUS_COLOR = {
   PENDING_APPROVAL: "bg-[#5856D6] text-[#5856D6]",
   APPROVED: "bg-[#098228] text-[#098228]",
 }
+export function formatNumber(num = 0) {
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "B"; // Billion
+  } else if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M"; // Million
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K"; // Thousand
+  }
+  return num === 0 ? "0" : formatFloatValue(num).toString(); // Default case
+}
+export const formatDate = (dateString) => {
+  if (!dateString) return "-"; // Handle empty or null dates
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+export const formatFloatValue = (value = 0) => {
+  return value % 1 === 0 ? value : value.toFixed(2);
+};
