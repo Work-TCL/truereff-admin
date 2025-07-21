@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../../common/Pagination";
 import Button from "../../common/Button";
-import AddEditModel from "./AddEditModel";
-import { deleteCategory, getCategory } from "../../../Utils/api";
+import { deleteMapingCategory, getMapingCategory } from "../../../Utils/api";
 import { RECORDS_PER_PAGE } from "../../../Utils/common-utils";
 import ConfirmModal from "../../common/ConfirmModel";
 import { toastMessage } from "../../../Utils/toast-message";
 import DynamicTable from "../../common/table";
+import AddEditMapingModel from "./AddEditModel";
 import ToggleMaping from "../../common/toggleMaping";
 
-const CategoryManagement = () => {
+const CategoryMappingManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
   const [isDelLoading, setIsDelLoading] = useState(false);
@@ -27,7 +27,7 @@ const CategoryManagement = () => {
   const refreshCentral = async () => {
     setIsLoading(true);
     try {
-      let response = await getCategory({
+      let response = await getMapingCategory({
         page: currentPage,
         limit: rowsPerPage,
       });
@@ -47,7 +47,7 @@ const CategoryManagement = () => {
   const handleDelete = async () => {
     setIsDelLoading(true);
     try {
-      let data = await deleteCategory(isModalOpen);
+      let data = await deleteMapingCategory(isModalOpen);
       if (data?.status === 200) {
         toastMessage.success(data?.message || "Category Deleted Successfully.");
         setIsModalOpen(null);
@@ -56,11 +56,7 @@ const CategoryManagement = () => {
       }
       throw data;
     } catch (error) {
-      console.log("error", error?.response?.data?.message);
-
-      toastMessage.error(
-        error?.response?.data?.message || "Failed to Delete Category"
-      );
+      toastMessage.error("Failed to Delete Category");
     } finally {
       setIsModalOpen(null);
       setIsDelLoading(false);
@@ -74,34 +70,43 @@ const CategoryManagement = () => {
 
   const columns = [
     {
-      header: "Name",
-      accessor: "name",
-    },
-    {
-      header: "Parent Name",
-      accessor: "parentId",
+      header: "Vendor Category",
+      accessor: "vendorCategory",
       render: (value) => {
-        return value ? value?.name : "-";
+        return value ? (
+          <span className="px-3 py-1 rounded-full text-xs font-medium text-gray-800">
+            {value?.name}
+          </span>
+        ) : (
+          "-"
+        );
       },
     },
     {
-      header: "Type",
-      accessor: "type",
+      header: "Creator Category",
+      accessor: "creatorCategory",
       render: (value) => {
-        return value ? value : "-";
+        return value ? (
+          <span className="px-3 py-1 rounded-full text-xs font-medium text-gray-800">
+            {value?.name}
+          </span>
+        ) : (
+          "-"
+        );
       },
     },
     {
       header: "Created At",
       accessor: "createdAt",
-      render: (value) =>
-        value ? (
+      render: (value) => {
+        return value ? (
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
             {new Date(value).toLocaleString()}
           </span>
         ) : (
           "-"
-        ),
+        );
+      },
     },
   ];
 
@@ -128,10 +133,10 @@ const CategoryManagement = () => {
             setIsNewOpen(true);
           }}
         >
-          Add
+          Add Maping
         </Button>
       </div>
-      <AddEditModel
+      <AddEditMapingModel
         category={undefined}
         isOpen={isNewOpen}
         refreshCentral={refreshCentral}
@@ -160,4 +165,4 @@ const CategoryManagement = () => {
   );
 };
 
-export default CategoryManagement;
+export default CategoryMappingManagement;

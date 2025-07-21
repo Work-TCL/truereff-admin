@@ -1,6 +1,11 @@
 import axiosInstance from "./axios-api";
 
 // CATEGORY
+export function createMapCategory(params = {}) {
+    return axiosInstance.post('/product/category/mapping/create', {
+        ...params
+    }).then(res => res.data).catch(e => e?.response?.data);
+}
 export function createCategory(params = {}) {
     return axiosInstance.post('/product/category/add', {
         ...params
@@ -12,9 +17,17 @@ export function getCategory(params) {
         params: params
     }).then(res => res.data);
 }
+export function getMapingCategory(params) {
+    return axiosInstance.get('/product/category/mapping/list', {
+        params: params
+    }).then(res => res.data);
+}
 
 export function deleteCategory(categoryId) {
     return axiosInstance.delete(`/product/category/${categoryId}`).then(res => res.data);
+}
+export function deleteMapingCategory(categoryId) {
+    return axiosInstance.delete(`/product/category/mapping/${categoryId}`).then(res => res.data);
 }
 
 // VENDOR

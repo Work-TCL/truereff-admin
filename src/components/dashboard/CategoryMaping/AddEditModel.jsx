@@ -1,24 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { addCategory } from "../../../Utils/validations";
+import { addCategory, mapCategory } from "../../../Utils/validations";
 import Modal from "../../common/Modal";
 import Input from "../../common/Input";
-import { createCategory, getCategory } from "../../../Utils/api";
+import {
+  createCategory,
+  createMapCategory,
+  getCategory,
+} from "../../../Utils/api";
 import { toastMessage } from "../../../Utils/toast-message";
 
-const CATEGORY_TYPE_OPTIONS = [
-  {
-    label: "Vendor",
-    value: "vendor",
-  },
-  {
-    label: "Creator",
-    value: "creator",
-  },
-];
-
-function AddEditModel({
+function AddEditMapingModel({
   isOpen = false,
   refreshCentral = () => {},
   setIsOpen = () => {},
@@ -26,33 +19,33 @@ function AddEditModel({
 }) {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [vendorCategories, setVendorCategories] = useState([]);
+  const [creatorCategories, setCreatorCategories] = useState([]);
   const methods = useForm({
     defaultValues: {
-      name: "",
-      parentCategory: "",
-      type: "",
+      creatorCategory: "",
+      vendorCategory: "",
     },
-    resolver: yupResolver(addCategory),
+    resolver: yupResolver(mapCategory),
     mode: "onChange",
   });
   const onSubmit = async (data) => {
     setLoading(true);
+    console.log("0909090909---->>", data);
+
     try {
-      const res = await createCategory({
-        name: data?.name,
-        parentId: data?.parentCategory || null,
-        type: data?.type,
+      const res = await createMapCategory({
+        creatorCategory: data?.creatorCategory,
+        vendorCategory: data?.vendorCategory,
       });
       if (res?.status === 201) {
         toastMessage.success(res?.message || "Category add successfully.");
         setIsOpen(false);
         setLoading(false);
         refreshCentral();
-        getCategories();
         methods.reset({
-          name: "",
-          parentCategory: "",
-          type: "",
+          creatorCategory: "",
+          vendorCategory: "",
         });
         return true;
       }
@@ -65,17 +58,27 @@ function AddEditModel({
     }
   };
 
-  const getCategories = async () => {
+  const getCategories = async (type = "vendor") => {
     try {
-      let data = await getCategory({});
+      let data = await getCategory({
+        type: type,
+      });
       console.log("data--cat", data?.data);
       if (data?.status === 200) {
         data = data?.data;
-        setCategories(
-          data?.data
-            ?.filter((val) => val && !Boolean(val?.parentId))
-            ?.map((t) => ({ label: t?.name, value: t?._id }))
-        );
+        if (type === "vendor") {
+          setVendorCategories(
+            data?.data
+              ?.filter((val) => val && !Boolean(val?.parentId))
+              ?.map((t) => ({ label: t?.name, value: t?._id }))
+          );
+        } else {
+          setCreatorCategories(
+            data?.data
+              ?.filter((val) => val && !Boolean(val?.parentId))
+              ?.map((t) => ({ label: t?.name, value: t?._id }))
+          );
+        }
       }
     } catch (error) {
     } finally {
@@ -83,12 +86,13 @@ function AddEditModel({
   };
 
   useEffect(() => {
-    getCategories();
+    getCategories("vendor");
+    getCategories("creator");
   }, []);
 
   return (
     <Modal
-      title="Add Category"
+      title="Map Category"
       isOpen={isOpen}
       onClose={() => {
         setIsOpen(false);
@@ -109,30 +113,22 @@ function AddEditModel({
           >
             <div className="col-span-2">
               <Input
-                name="name"
-                type="name"
-                placeholder={"Name"}
-                label="Category"
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-                name="parentCategory"
+                name="vendorCategory"
                 type="react-select"
-                placeholder="select parent category"
-                label="Parent Category"
+                placeholder="select vendor category"
+                label="Vendor Category"
                 required={false}
-                options={categories}
+                options={vendorCategories}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-2">
               <Input
-                name="type"
+                name="creatorCategory"
                 type="react-select"
-                placeholder="select type category"
-                label="Category Type"
-                required={true}
-                options={CATEGORY_TYPE_OPTIONS}
+                placeholder="select creator category"
+                label="Creator Category"
+                required={false}
+                options={creatorCategories}
               />
             </div>
             <div class="col-span-2 flex items-center pt-4 md:pt-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -161,4 +157,4 @@ function AddEditModel({
   );
 }
 
-export default AddEditModel;
+export default AddEditMapingModel;
