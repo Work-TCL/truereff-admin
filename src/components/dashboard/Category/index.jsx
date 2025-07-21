@@ -146,6 +146,7 @@ const CategoryManagement = () => {
         cancelText="No, cancel"
       />
       <DynamicTable
+        isLoading={isLoading}
         columns={columns}
         data={categories}
         actions={actions}

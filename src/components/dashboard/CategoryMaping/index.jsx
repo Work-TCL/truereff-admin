@@ -126,7 +126,7 @@ const CategoryMappingManagement = () => {
           Loading...
         </div>
       ) : null}
-      <div className="flex justify-end items-center gap-5">
+      <div className="flex justify-end items-center gap">
         <ToggleMaping />
         <Button
           onClick={() => {
@@ -151,6 +151,7 @@ const CategoryMappingManagement = () => {
         cancelText="No, cancel"
       />
       <DynamicTable
+        isLoading={isLoading}
         columns={columns}
         data={categories}
         actions={actions}
