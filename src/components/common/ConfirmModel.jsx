@@ -17,7 +17,7 @@ export default function ConfirmModal({
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-gray-700 rounded-lg shadow-lg max-w-md w-full p-6 relative"
+        className="bg-white dark:bg-gray-700 rounded-lg shadow-lg max-w-md w-full p-3 m-3 md:p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}

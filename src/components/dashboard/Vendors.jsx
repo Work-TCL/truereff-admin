@@ -121,6 +121,7 @@ const Creators = () => {
           <a
             href={value}
             target="_blank"
+            rel="noopener noreferrer"
             className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
           >
             {value}

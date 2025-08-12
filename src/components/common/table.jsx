@@ -17,13 +17,14 @@ export default function DynamicTable({
     <div className="p-6 bg-white shadow rounded-lg flex flex-col w-full flex-1 overflow-hidden">
       <div
         className={cn(
-          "overflow-auto flex-1 w-full",
+          "overflow-auto flex-1 ",
           data?.length === 0
             ? "flex justify-center items-center h-full flex-1"
             : ""
         )}
       >
         {data?.length !== 0 ? (
+          <div className="overflow-x-auto w-full min-w-[200px]">
           <table className="w-full text-left">
             <thead className="text-sm text-gray-600 border-b">
               <tr>
@@ -69,6 +70,7 @@ export default function DynamicTable({
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <TablePlaceholder />
         )}
