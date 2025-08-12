@@ -11,14 +11,14 @@ export default function Modal({
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="fixed inset-0 z-[40] sm:w-screen h-screen overflow-hidden flex justify-center items-center">
+    <div className="fixed w-full inset-0 z-[40] sm:w-screen h-screen overflow-hidden flex justify-center items-center">
       <div
         className="block fixed inset-0 bg-black bg-opacity-60 transition-opacity z-1 lg:backdrop-blur-none backdrop-blur-sm"
         aria-hidden="true"
         onClick={() => onClose()}
       ></div>
       <div
-        className={`bg-white p-5 relative rounded-lg text-left transition-all w-fit h-fit max-h-[90vh] overflow-hidden flex flex-col ${className}`}
+        className={`bg-white m-2 p-3 md:p-5 relative rounded-lg text-left transition-all w-fit h-fit max-h-[90vh] overflow-hidden flex flex-col ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -47,7 +47,7 @@ export default function Modal({
         </div>
 
         {/* Modal Body */}
-        <div className="text-gray-700 space-y-4 flex-1 overflow-auto">
+        <div className="w-full text-gray-700 space-y-4 flex-1 overflow-auto">
           {children}
         </div>
       </div>

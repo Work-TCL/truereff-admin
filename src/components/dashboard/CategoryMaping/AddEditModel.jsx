@@ -105,7 +105,7 @@ function AddEditMapingModel({
       ) : (
         ""
       )} */}
-      <div className="min-w-[500px]">
+      <div className="min-w-[320px] md:min-w-[500px]">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}

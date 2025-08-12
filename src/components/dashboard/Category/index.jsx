@@ -121,9 +121,10 @@ const CategoryManagement = () => {
           Loading...
         </div>
       ) : null}
-      <div className="flex justify-end items-center gap-5">
+      <div className="flex justify-end items-center gap-2 md:gap-5 mb-2">
         <ToggleMaping />
         <Button
+        className="mb-0"
           onClick={() => {
             setIsNewOpen(true);
           }}

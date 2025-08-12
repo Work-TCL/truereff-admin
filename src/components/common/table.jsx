@@ -14,7 +14,7 @@ export default function DynamicTable({
     return null;
   }
   return (
-    <div className="p-6 bg-white shadow rounded-lg flex flex-col w-full flex-1 overflow-hidden">
+    <div className="p-3 md:p-6 bg-white shadow rounded-lg flex flex-col w-full flex-1 overflow-hidden">
       <div
         className={cn(
           "overflow-auto flex-1 ",
@@ -24,14 +24,13 @@ export default function DynamicTable({
         )}
       >
         {data?.length !== 0 ? (
-          <div className="overflow-x-auto w-full min-w-[200px]">
           <table className="w-full text-left">
             <thead className="text-sm text-gray-600 border-b">
               <tr>
                 {columns.map((col) => (
                   <th
                     key={col.accessor}
-                    className="py-2 bg-white sticky top-0 z-10 text-nowrap px-2"
+                    className="pb-2 bg-white sticky top-0 z-10 text-nowrap px-2"
                   >
                     {col.header}
                   </th>
@@ -70,7 +69,6 @@ export default function DynamicTable({
               ))}
             </tbody>
           </table>
-          </div>
         ) : (
           <TablePlaceholder />
         )}

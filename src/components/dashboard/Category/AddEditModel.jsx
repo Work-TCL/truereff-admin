@@ -101,7 +101,7 @@ function AddEditModel({
       ) : (
         ""
       )} */}
-      <div className="min-w-[500px]">
+      <div className="min-w-[320px] md:min-w-[500px]">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
@@ -115,7 +115,7 @@ function AddEditModel({
                 label="Category"
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-2 md:col-span-1">
               <Input
                 name="parentCategory"
                 type="react-select"
@@ -125,7 +125,7 @@ function AddEditModel({
                 options={categories}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-2 md:col-span-1">
               <Input
                 name="type"
                 type="react-select"
