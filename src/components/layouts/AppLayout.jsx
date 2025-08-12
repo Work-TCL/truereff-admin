@@ -14,9 +14,9 @@ export const AppLayout = () => {
         setActive={setActive}
         active={active}
       />
-      <div className="flex-1 flex flex-col w-full">
+      <div className="flex-1 flex flex-col w-full overflow-hidden ">
         <Header active={active} setIsOpen={setIsOpen} />
-        <main className="flex-1 overflow-y-auto w-full">
+        <main className="flex-1 overflow-hidden overflow-y-auto w-full ">
           <Outlet />
         </main>
       </div>
