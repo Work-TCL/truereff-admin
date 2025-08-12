@@ -31,7 +31,7 @@ export default function DynamicTable({
                 {columns.map((col) => (
                   <th
                     key={col.accessor}
-                    className="py-2 bg-white sticky top-0 z-10 text-nowrap"
+                    className="py-2 bg-white sticky top-0 z-10 text-nowrap px-2"
                   >
                     {col.header}
                   </th>
@@ -45,7 +45,7 @@ export default function DynamicTable({
               {data.map((item, idx) => (
                 <tr key={idx} className="border-b last:border-0">
                   {columns.map((col) => (
-                    <td key={col.accessor} className="py-3 text-nowrap">
+                    <td key={col.accessor} className="py-3 text-nowrap px-2">
                       {col.render
                         ? col.render(item[col.accessor], item)
                         : item[col.accessor]}
