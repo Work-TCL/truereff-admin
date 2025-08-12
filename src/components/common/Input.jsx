@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useState } from "react";
 import Select from "react-select";
 import { get } from "lodash";
-import { MoveDown, Tag, X, EyeOff, Eye } from "lucide-react";
+import { MoveDown, EyeOff, Eye } from "lucide-react";
 import { cn } from "../../Utils/common-utils";
 
 export const inputStyle =
@@ -26,12 +26,12 @@ export default function Input({
   ...props
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const {
-    formState: { errors, touchedFields, submitCount },
+    formState: { errors },
     control,
-    trigger,
-    register,
+    // trigger,
+    // register,
     setValue,
     watch,
   } = useFormContext();
@@ -161,61 +161,61 @@ export default function Input({
     />
   );
 
-  const renderTagInputUpdated = () => (
-    <Controller
-      name={name}
-      control={control}
-      rules={{ required: required ? `${label} is required` : false }}
-      render={({ field }) => (
-        <div className="flex flex-col">
-          {getLabel()}
-          <div className="relative w-full">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={addTag}
-              onBlur={field.onBlur}
-              placeholder={placeholder}
-              className={cn(
-                "w-full bg-white text-gray-700 border border-gray-300 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2",
-                inputClassName
-              )}
-              {...props}
-            />
-            <Tag
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-              size={16}
-            />
-          </div>
-          {tags?.length > 0 ? "" : getError()}
-          {tags.length > 0 && (
-            <div className="flex items-center py-2 mt-2 gap-4 flex-wrap">
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-darken text-white py-1 px-3 rounded-full flex items-center gap-2 cursor-pointer hover:bg-gray-darken/80 transition-colors"
-                  onClick={() => console.log(`Tag clicked: ${tag}`)} // Optional: Add click functionality
-                >
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering the onClick of the span
-                      removeTag(index);
-                    }}
-                    className="text-sm text-white hover:text-gray-200"
-                  >
-                    ✖
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    />
-  );
+  // const renderTagInputUpdated = () => (
+  //   <Controller
+  //     name={name}
+  //     control={control}
+  //     rules={{ required: required ? `${label} is required` : false }}
+  //     render={({ field }) => (
+  //       <div className="flex flex-col">
+  //         {getLabel()}
+  //         <div className="relative w-full">
+  //           <input
+  //             type="text"
+  //             value={inputValue}
+  //             onChange={(e) => setInputValue(e.target.value)}
+  //             onKeyDown={addTag}
+  //             onBlur={field.onBlur}
+  //             placeholder={placeholder}
+  //             className={cn(
+  //               "w-full bg-white text-gray-700 border border-gray-300 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2",
+  //               inputClassName
+  //             )}
+  //             {...props}
+  //           />
+  //           <Tag
+  //             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+  //             size={16}
+  //           />
+  //         </div>
+  //         {tags?.length > 0 ? "" : getError()}
+  //         {tags.length > 0 && (
+  //           <div className="flex items-center py-2 mt-2 gap-4 flex-wrap">
+  //             {tags.map((tag, index) => (
+  //               <span
+  //                 key={index}
+  //                 className="bg-gray-darken text-white py-1 px-3 rounded-full flex items-center gap-2 cursor-pointer hover:bg-gray-darken/80 transition-colors"
+  //                 onClick={() => console.log(`Tag clicked: ${tag}`)} // Optional: Add click functionality
+  //               >
+  //                 {tag}
+  //                 <button
+  //                   type="button"
+  //                   onClick={(e) => {
+  //                     e.stopPropagation(); // Prevent triggering the onClick of the span
+  //                     removeTag(index);
+  //                   }}
+  //                   className="text-sm text-white hover:text-gray-200"
+  //                 >
+  //                   ✖
+  //                 </button>
+  //               </span>
+  //             ))}
+  //           </div>
+  //         )}
+  //       </div>
+  //     )}
+  //   />
+  // );
 
   const renderPasswordInput = () => (
     <Controller
@@ -427,94 +427,94 @@ export default function Input({
     />
   );
 
-  const multiSelectWithTags = () => {
-    return (
-      <Controller
-        control={control}
-        name={name}
-        rules={{ required: required ? `${label} is required` : false }}
-        render={({ field }) => {
-          const handleChange = (selected) => {
-            const updated = [...(field.value || []), selected];
-            field.onChange(updated);
-          };
+  // const multiSelectWithTags = () => {
+  //   return (
+  //     <Controller
+  //       control={control}
+  //       name={name}
+  //       rules={{ required: required ? `${label} is required` : false }}
+  //       render={({ field }) => {
+  //         const handleChange = (selected) => {
+  //           const updated = [...(field.value || []), selected];
+  //           field.onChange(updated);
+  //         };
 
-          const handleRemove = (valueToRemove) => {
-            const updated = (field.value || []).filter(
-              (item) => item.value !== valueToRemove
-            );
-            field.onChange(updated);
-          };
+  //         const handleRemove = (valueToRemove) => {
+  //           const updated = (field.value || []).filter(
+  //             (item) => item.value !== valueToRemove
+  //           );
+  //           field.onChange(updated);
+  //         };
 
-          // Filter out selected options from available options
-          const selectedValues = (field.value || []).map((item) => item.value);
-          const filteredOptions = options.filter(
-            (option) => !selectedValues.includes(option.value)
-          );
+  //         // Filter out selected options from available options
+  //         const selectedValues = (field.value || []).map((item) => item.value);
+  //         const filteredOptions = options.filter(
+  //           (option) => !selectedValues.includes(option.value)
+  //         );
 
-          return (
-            <div className="flex flex-col gap-1">
-              {getLabel?.()}
-              <Select
-                value={null} // keep the value empty to always show placeholder
-                onChange={handleChange}
-                options={filteredOptions}
-                placeholder={placeholder ? placeholder : "Select option"}
-                classNamePrefix="select"
-                className="react-select-container"
-                isDisabled={props?.disabled}
-                menuPortalTarget={
-                  menuPortalTarget
-                    ? typeof document !== "undefined"
-                      ? document.body
-                      : null
-                    : null
-                }
-                menuPosition="fixed"
-                autoFocus={false}
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    height: "54px",
-                    borderRadius: "8px",
-                  }),
-                  placeholder: (base) => ({
-                    ...base,
-                    fontSize: "0.875rem ", // Tailwind text-sm
-                    color: "#a1a1aa", // Tailwind slate-400
-                  }),
-                }}
-              />
+  //         return (
+  //           <div className="flex flex-col gap-1">
+  //             {getLabel?.()}
+  //             <Select
+  //               value={null} // keep the value empty to always show placeholder
+  //               onChange={handleChange}
+  //               options={filteredOptions}
+  //               placeholder={placeholder ? placeholder : "Select option"}
+  //               classNamePrefix="select"
+  //               className="react-select-container"
+  //               isDisabled={props?.disabled}
+  //               menuPortalTarget={
+  //                 menuPortalTarget
+  //                   ? typeof document !== "undefined"
+  //                     ? document.body
+  //                     : null
+  //                   : null
+  //               }
+  //               menuPosition="fixed"
+  //               autoFocus={false}
+  //               styles={{
+  //                 control: (base) => ({
+  //                   ...base,
+  //                   height: "54px",
+  //                   borderRadius: "8px",
+  //                 }),
+  //                 placeholder: (base) => ({
+  //                   ...base,
+  //                   fontSize: "0.875rem ", // Tailwind text-sm
+  //                   color: "#a1a1aa", // Tailwind slate-400
+  //                 }),
+  //               }}
+  //             />
 
-              {/* Custom Tag Display */}
-              {Array.isArray(field.value) && field.value.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {field.value.map((tag) => (
-                    <div
-                      key={tag.value}
-                      className={cn(
-                        "flex items-center gap-1 px-3 py-1 text-sm rounded-full bg-muted text-muted-foreground border border-muted-foreground"
-                      )}
-                    >
-                      {tag.label}
-                      <button
-                        type="button"
-                        onClick={() => handleRemove(tag.value)}
-                        className="hover:text-destructive focus:outline-none"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {getError?.()}
-            </div>
-          );
-        }}
-      />
-    );
-  };
+  //             {/* Custom Tag Display */}
+  //             {Array.isArray(field.value) && field.value.length > 0 && (
+  //               <div className="flex flex-wrap gap-2 mt-2">
+  //                 {field.value.map((tag) => (
+  //                   <div
+  //                     key={tag.value}
+  //                     className={cn(
+  //                       "flex items-center gap-1 px-3 py-1 text-sm rounded-full bg-muted text-muted-foreground border border-muted-foreground"
+  //                     )}
+  //                   >
+  //                     {tag.label}
+  //                     <button
+  //                       type="button"
+  //                       onClick={() => handleRemove(tag.value)}
+  //                       className="hover:text-destructive focus:outline-none"
+  //                     >
+  //                       <X className="w-4 h-4" />
+  //                     </button>
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             )}
+  //             {getError?.()}
+  //           </div>
+  //         );
+  //       }}
+  //     />
+  //   );
+  // };
 
   const renderInput = () => {
     switch (type) {

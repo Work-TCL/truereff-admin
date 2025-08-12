@@ -1,11 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { addCategory, mapCategory } from "../../../Utils/validations";
+import { mapCategory } from "../../../Utils/validations";
 import Modal from "../../common/Modal";
 import Input from "../../common/Input";
 import {
-  createCategory,
+  // createCategory,
   createMapCategory,
   getCategory,
 } from "../../../Utils/api";
@@ -15,10 +15,10 @@ function AddEditMapingModel({
   isOpen = false,
   refreshCentral = () => {},
   setIsOpen = () => {},
-  category = undefined,
+  // category = undefined,
 }) {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [vendorCategories, setVendorCategories] = useState([]);
   const [creatorCategories, setCreatorCategories] = useState([]);
   const methods = useForm({

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Pagination from "../common/Pagination";
 import {
   CREATOR_STATUS,
-  RECORDS_PER_PAGE,
+  // RECORDS_PER_PAGE,
   STATUS_COLOR,
 } from "../../Utils/common-utils";
 import {
-  getCreatorDetails,
-  getCreatorList,
+  // getCreatorDetails,
+  // getCreatorList,
   getVendorDetails,
-  postCreatorApprovedReject,
+  // postCreatorApprovedReject,
   postVendorApprovedReject,
 } from "../../Utils/api";
-import DynamicTable from "../common/table";
+// import DynamicTable from "../common/table";
 import { toastMessage } from "../../Utils/toast-message";
 import { Link, useParams } from "react-router-dom";
 

@@ -65,7 +65,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
+      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-sm m-3">
         <h2 className="text-xl font-bold mb-4 text-center">Admin Login</h2>
         <div className="mb-4">
           <input
