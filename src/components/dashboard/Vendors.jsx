@@ -18,6 +18,10 @@ const Creators = () => {
   const [totalPages, setTotalPages] = useState(1);
   const rowsPerPage = RECORDS_PER_PAGE;
 
+  // new states for filters
+  const [searchVal, setSearchVal] = useState("");
+  const [step, setStep] = useState(""); // "", "1", "2", "3"
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -26,7 +30,14 @@ const Creators = () => {
   const refreshCentral = async () => {
     setIsLoading(true);
     try {
-      let data = await getVendorList({ page: currentPage, limit: rowsPerPage });
+      const params = {
+        page: currentPage,
+        limit: rowsPerPage,
+      };
+      if (searchVal?.trim() !== "") params.search = searchVal.trim();
+      if (step) params.step = Number(step);
+
+      let data = await getVendorList(params);
       console.log("data", data);
       if (data?.status === 200) {
         data = data?.data;
@@ -37,7 +48,7 @@ const Creators = () => {
         setCategories(data?.list);
       }
     } catch (error) {
-      console.log("while fetching category");
+      console.log("while fetching category", error);
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +60,6 @@ const Creators = () => {
       let data = await postVendorApprovedReject(params);
       if (data?.status === 200) {
         toastMessage.success(data?.message || "Approved.");
-        // setIsModalOpen(null);
         refreshCentral();
         return true;
       }
@@ -57,15 +67,15 @@ const Creators = () => {
     } catch (error) {
       toastMessage.error("Failed to update status");
     } finally {
-      // setIsModalOpen(null);
       setIsDelLoading(false);
     }
   };
 
+  // refresh when page / rowsPerPage / filters change
   useEffect(() => {
     refreshCentral();
     // eslint-disable-next-line
-  }, [currentPage, rowsPerPage]);
+  }, [currentPage, rowsPerPage, searchVal, step]);
 
   const columns = [
     {
@@ -90,8 +100,9 @@ const Creators = () => {
         ),
     },
     {
-      header: "Business Email",
-      accessor: "company_email",
+      header: "Business Phone",
+      accessor: "accountId",
+      render: (value) => (value?.phone ? value?.phone : "-"),
     },
     {
       header: "Completed Step",
@@ -186,6 +197,15 @@ const Creators = () => {
         ),
     },
   ];
+
+  const STEP_COUNT = 3;
+  const stepOptions = [
+    { value: "", label: "All Steps" },
+    ...Array.from({ length: STEP_COUNT }, (_, i) => ({
+      value: String(i + 1),
+      label: `Step ${i + 1}`,
+    })),
+  ];
   return (
     <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
       {isLoading || isDelLoading ? (
@@ -193,6 +213,40 @@ const Creators = () => {
           Loading...
         </div>
       ) : null}
+
+      {/* Filters: search + step select */}
+      <div className="flex items-center gap-3 mb-4">
+        <input
+          type="text"
+          value={searchVal}
+          onChange={(e) => {
+            setSearchVal(e.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder="Search Brands"
+          className="px-3 py-2 border rounded-md w-full max-w-sm focus:border focus:outline-none"
+        />
+
+        <select
+          value={step}
+          onChange={(e) => {
+            setStep(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="px-3 py-2 border rounded-md appearance-none focus:border focus:outline-none"
+        >
+          {stepOptions.map((opt) => (
+            <option
+              key={opt.value === "" ? "all" : opt.value}
+              value={opt.value}
+              selected={opt.value == step}
+            >
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <DynamicTable
         columns={columns}
         data={categories}
