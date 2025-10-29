@@ -18,6 +18,10 @@ const Creators = () => {
   const [totalPages, setTotalPages] = useState(1);
   const rowsPerPage = RECORDS_PER_PAGE;
 
+  // new filter states
+  const [searchVal, setSearchVal] = useState("");
+  const [step, setStep] = useState(""); // "", "1", "2", "3"
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -26,10 +30,14 @@ const Creators = () => {
   const refreshCentral = async () => {
     setIsLoading(true);
     try {
-      let data = await getCreatorList({
+      const params = {
         page: currentPage,
         limit: rowsPerPage,
-      });
+      };
+      if (searchVal?.trim() !== "") params.search = searchVal.trim();
+      if (step) params.step = Number(step);
+
+      let data = await getCreatorList(params);
       if (data?.status === 200) {
         data = data?.data;
         const totalPage = Math.ceil((data?.total || 1) / rowsPerPage);
@@ -66,7 +74,7 @@ const Creators = () => {
   useEffect(() => {
     refreshCentral();
     //eslint-disable-next-line
-  }, [currentPage, rowsPerPage]);
+  }, [currentPage, rowsPerPage, searchVal, step]);
 
   const columns = [
     {
@@ -91,8 +99,9 @@ const Creators = () => {
         ),
     },
     {
-      header: "Email",
-      accessor: "email",
+      header: "Phone",
+      accessor: "accountId",
+      render: (value) => (value?.phone ? value?.phone : "-"),
     },
     {
       header: "Completed Step",
@@ -110,54 +119,6 @@ const Creators = () => {
           "-"
         ),
     },
-    // {
-    //   header: "Instagram",
-    //   accessor: "instagram_link",
-    //   render: (value) =>
-    //     value ? (
-    //       <a
-    //         href={value}
-    //         target="_blank"
-    //         className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
-    //       >
-    //         {value}
-    //       </a>
-    //     ) : (
-    //       "-"
-    //     ),
-    // },
-    // {
-    //   header: "Youtube",
-    //   accessor: "youtube_link",
-    //   render: (value) =>
-    //     value ? (
-    //       <a
-    //         href={value}
-    //         target="_blank"
-    //         className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
-    //       >
-    //         {value}
-    //       </a>
-    //     ) : (
-    //       "-"
-    //     ),
-    // },
-    // {
-    //   header: "Website",
-    //   accessor: "website",
-    //   render: (value) =>
-    //     value ? (
-    //       <a
-    //         href={value}
-    //         target="_blank"
-    //         className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
-    //       >
-    //         {value}
-    //       </a>
-    //     ) : (
-    //       "-"
-    //     ),
-    // },
     {
       header: "Created At",
       accessor: "createdAt",
@@ -215,20 +176,8 @@ const Creators = () => {
     },
   ];
 
-  const actions = [
-    // {
-    //   label: "Approve",
-    //   onClick: (item) => {},
-    //   className:
-    //     "text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 focus:ring-red-300",
-    // },
-    // {
-    //   label: "Reject",
-    //   onClick: (item) => {},
-    //   className:
-    //     "text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 focus:ring-red-300",
-    // },
-  ];
+  const actions = [];
+
   return (
     <div className="relative h-full overflow-hidden flex flex-col w-full p-4">
       {isLoading || isDelLoading ? (
@@ -236,6 +185,35 @@ const Creators = () => {
           Loading...
         </div>
       ) : null}
+
+      {/* Filters: search + step select */}
+      <div className="flex items-center gap-3 mb-4">
+        <input
+          type="text"
+          value={searchVal}
+          onChange={(e) => {
+            setSearchVal(e.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder="Search Creators"
+          className="px-3 py-2 border rounded-md w-full max-w-sm focus:border focus:outline-none"
+        />
+
+        <select
+          value={step}
+          onChange={(e) => {
+            setStep(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="px-3 py-2 border rounded-md appearance-none focus:border focus:outline-none"
+        >
+          <option value="">All Steps</option>
+          <option value="1">Step 1</option>
+          <option value="2">Step 2</option>
+          <option value="3">Step 3</option>
+        </select>
+      </div>
+
       <DynamicTable
         columns={columns}
         data={categories}
