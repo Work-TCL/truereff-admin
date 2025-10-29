@@ -44,7 +44,9 @@ export function getVendorDetails(vendorId) {
 // CREATOR
 
 export function getCreatorList(params) {
-    return axiosInstance.get(`/auth/admin/creator/list?page=${params.page}&limit=${params.limit}`).then(res => res.data);
+    return axiosInstance.get(`/auth/admin/creator/list`, {
+        params: params
+    }).then(res => res.data);
 }
 export function postCreatorApprovedReject(params) {
     return axiosInstance.post('/auth/admin/creator/approve-reject', {

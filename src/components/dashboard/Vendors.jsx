@@ -22,6 +22,18 @@ const Creators = () => {
   const [searchVal, setSearchVal] = useState("");
   const [step, setStep] = useState(""); // "", "1", "2", "3"
 
+  // debounced search value
+  const [debouncedSearchVal, setDebouncedSearchVal] = useState(searchVal);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchVal(searchVal.trim());
+      setCurrentPage(1); // reset page when debounced value changes
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(handler);
+  }, [searchVal]);
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -34,7 +46,7 @@ const Creators = () => {
         page: currentPage,
         limit: rowsPerPage,
       };
-      if (searchVal?.trim() !== "") params.search = searchVal.trim();
+      if (debouncedSearchVal?.trim() !== "") params.search = debouncedSearchVal;
       if (step) params.step = Number(step);
 
       let data = await getVendorList(params);
@@ -75,7 +87,7 @@ const Creators = () => {
   useEffect(() => {
     refreshCentral();
     // eslint-disable-next-line
-  }, [currentPage, rowsPerPage, searchVal, step]);
+  }, [currentPage, rowsPerPage, debouncedSearchVal, step]);
 
   const columns = [
     {
@@ -133,7 +145,7 @@ const Creators = () => {
             href={value}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer"
+            className="px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800 hover:underline cursor-pointer max-w-[200px] w-fit  overflow-hidden text-ellipsis block"
           >
             {value}
           </a>
