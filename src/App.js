@@ -12,6 +12,7 @@ import Vendors from './components/dashboard/Vendors';
 import CreatorDetails from './components/dashboard/CreatorDetails';
 import VendorDetails from './components/dashboard/VendorDetails';
 import MainCategory from './components/dashboard/MainCategory';
+import GetInTouch from './components/dashboard/GetInTouch';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="creators/:creatorId" element={<CreatorDetails />} />
           <Route path="vendors" element={<Vendors />} />
           <Route path="vendors/:vendorId" element={<VendorDetails />} />
+          <Route path="/get-in-touch" element={<GetInTouch />} />
         </Route>
       </Routes>
     </Router>

@@ -38,6 +38,11 @@ export function getVendorList(params) {
     }).then(res => res.data);
 }
 
+export function getInTouchList(params) {
+    const {page, limit, search, type} = params;
+    return axiosInstance.get(`/auth/contact-us/list?page=${page}&limit=${limit}${search ? `&search=${search}` : ''}${type ? `&type=${type}`:""}`).then(res => res);
+}
+
 export function getVendorDetails(vendorId) {
     return axiosInstance.get(`/auth/admin/vendor/details/${vendorId}`).then(res => res.data);
 }

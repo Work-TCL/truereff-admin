@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Home, Layers, UsersRound, Store, X } from "lucide-react";
+import { Home, Layers, UsersRound, Store, X, Contact } from "lucide-react";
 
 const Sidebar = ({ setActive, isOpen, setIsOpen }) => {
 
@@ -10,6 +10,7 @@ const Sidebar = ({ setActive, isOpen, setIsOpen }) => {
     { name: "Categories", icon: <Layers />, path: "/categories" },
     { name: "Creators", icon: <UsersRound />, path: "/creators" },
     { name: "Brands", icon: <Store />, path: "/vendors" },
+    { name: "Get In Touch", icon: <Contact />, path: "/get-in-touch" },
   ];
 
   const handleActive = (data) => {
