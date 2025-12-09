@@ -1,12 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { Dashboard } from './components/Dashboard';
+import { Dashboard } from './components/dashboard/Dashboard';
 import Login from './components/auth/Login';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { PublicRoute } from './routes/PublicRoute';
+import Settings from './components/dashboard/Settings';
+import { AppLayout } from './components/layouts/AppLayout';
+import Creators from './components/dashboard/Creator';
+import Vendors from './components/dashboard/Vendors';
+import CreatorDetails from './components/dashboard/CreatorDetails';
+import VendorDetails from './components/dashboard/VendorDetails';
+import MainCategory from './components/dashboard/MainCategory';
+import GetInTouch from './components/dashboard/GetInTouch';
 
 function App() {
   return (
@@ -15,22 +21,21 @@ function App() {
         <Route path="/login" element={<PublicRoute>
           <Login />
         </PublicRoute>} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <div className="flex h-screen overflow-hidden bg-gray-100">
-                <Sidebar />
-                <div className="flex-1 flex flex-col">
-                  <Header />
-                  <main className="flex-1 overflow-y-auto">
-                    <Dashboard />
-                  </main>
-                </div>
-              </div>
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Dashboard />} />
+          {/* Add more nested routes here */}
+          <Route path="categories" element={<MainCategory />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="creators" element={<Creators />} />
+          <Route path="creators/:creatorId" element={<CreatorDetails />} />
+          <Route path="vendors" element={<Vendors />} />
+          <Route path="vendors/:vendorId" element={<VendorDetails />} />
+          <Route path="/get-in-touch" element={<GetInTouch />} />
+        </Route>
       </Routes>
     </Router>
   );
