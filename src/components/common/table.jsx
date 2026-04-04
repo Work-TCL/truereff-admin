@@ -50,7 +50,7 @@ export default function DynamicTable({
                         : item[col.accessor]}
                     </td>
                   ))}
-                  {actions.length > 0 && (
+                  {(item?.user_name !== "truereff" && actions.length > 0) && (
                     <td className="py-3">
                       <div className="flex gap-2">
                         {actions.map((action, i) => (
