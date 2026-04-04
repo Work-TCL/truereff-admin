@@ -46,6 +46,11 @@ export function getInTouchList(params) {
 export function getVendorDetails(vendorId) {
     return axiosInstance.get(`/auth/admin/vendor/details/${vendorId}`).then(res => res.data);
 }
+
+export function deleteVendorAccount(accountId) {
+    return axiosInstance.delete(`/auth/admin/vendor/${accountId}`).then(res => res.data);
+}
+
 // CREATOR
 
 export function getCreatorList(params) {
@@ -66,4 +71,8 @@ export function postVendorApprovedReject(params) {
 
 export function getCreatorDetails(vendorId) {
     return axiosInstance.get(`/auth/admin/creator/details/${vendorId}`).then(res => res.data);
+}
+
+export function deleteCreatorAccount(accountId) {
+    return axiosInstance.delete(`/auth/admin/creator/${accountId}`).then(res => res.data);
 }

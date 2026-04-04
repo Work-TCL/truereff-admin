@@ -5,14 +5,16 @@ import {
   RECORDS_PER_PAGE,
   STATUS_COLOR,
 } from "../../Utils/common-utils";
-import { getVendorList, postVendorApprovedReject } from "../../Utils/api";
+import { deleteVendorAccount, getVendorList, postVendorApprovedReject } from "../../Utils/api";
 import DynamicTable from "../common/table";
 import { toastMessage } from "../../Utils/toast-message";
 import { Link } from "react-router-dom";
+import ConfirmModal from "../common/ConfirmModel";
 
 const Creators = () => {
   const [isDelLoading, setIsDelLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+   const [isModalOpen, setIsModalOpen] = useState(null);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -82,6 +84,25 @@ const Creators = () => {
       setIsDelLoading(false);
     }
   };
+
+  const handleDelete = async () => {
+        setIsDelLoading(true);
+        try {
+          let data = await deleteVendorAccount(isModalOpen);
+          if (data?.status === 200) {
+            toastMessage.success(data?.message || "Account Deleted Successfully.");
+            setIsModalOpen(null);
+            refreshCentral();
+            return true;
+          }
+          throw data;
+        } catch (error) {
+          toastMessage.error("Failed to Delete Account");
+        } finally {
+          setIsModalOpen(null);
+          setIsDelLoading(false);
+        }
+      };
 
   // refresh when page / rowsPerPage / filters change
   useEffect(() => {
@@ -210,6 +231,15 @@ const Creators = () => {
     },
   ];
 
+  const actions = [
+    {
+      label: "Delete",
+      onClick: (item) => setIsModalOpen(item._id),
+      className:
+        "text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 focus:ring-red-300",
+    },
+  ];
+
   const STEP_COUNT = 3;
   const stepOptions = [
     { value: "", label: "All Steps" },
@@ -262,7 +292,7 @@ const Creators = () => {
       <DynamicTable
         columns={columns}
         data={categories}
-        actions={[]}
+        actions={actions}
         pagination={{
           Component: Pagination,
           currentPage,
@@ -270,6 +300,14 @@ const Creators = () => {
           onPageChange: handlePageChange,
         }}
       />
+      <ConfirmModal
+                    isOpen={Boolean(isModalOpen)}
+                    onClose={() => setIsModalOpen(null)}
+                    onConfirm={handleDelete}
+                    title="Are you sure you want to delete this account?"
+                    confirmText={isDelLoading ? "Loading..." : "Yes, I'm sure"}
+                    cancelText="No, cancel"
+                  />
     </div>
   );
 };
