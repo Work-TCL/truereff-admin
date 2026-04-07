@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "dev",
+    "hotfix/filter-list-data",
+    "main"
+  ],
+  "parent": {
+    "dev": "main",
+    "hotfix/filter-list-data": "main",
+    "main": null
+  },
+  "order": [
+    "main",
+    "dev",
+    "hotfix/filter-list-data"
+  ]
+}
